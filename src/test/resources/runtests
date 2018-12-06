@@ -45,7 +45,8 @@ do
 		if [ -n "`cat $TMP`" ]
 		then
 			$COPYRIGHT -y -r -n -w $opt $i > $i.expect
-			mv $i.new $i.new.expect
+			sed -e "s/$THISYEAR/THISYEAR/" < $i.new > $i.new.expect
+			rm $i.new
 		fi
 	elif [ -f $i.expect ]
 	then

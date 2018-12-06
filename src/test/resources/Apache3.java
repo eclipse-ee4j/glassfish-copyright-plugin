@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2004 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2002, 2004 Oracle and/or its affiliates. All rights reserved.
  * Copyright 2010 The Apache Software Foundation
  *
  * Licensed to the Apache Software Foundation (ASF) under one or more

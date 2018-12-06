@@ -19,19 +19,20 @@
  * Optionally repair any that are wrong.
  *
  * Usage: java -jar copyright.jar
- *		[-w] -[y] [-r] [-n] [-s] [-h] [-m] [-g] [-c] [-q] [-j] [-x] [-p]
- *		[-t] [-N] [-O] [-X pat] [-C file] [-A file] [-B file] [-P] [-V]
- *		[-v] [files ...]
+ *		[-w] -[y] [-r] [-n] [-s] [-h] [-m] [-g] [-S] [-c] [-q] [-j] [-x]
+ *		[-p] [-t] [-N] [-D] [-X pat] [-C file] [-A file] [-B file] [-P]
+ *		[-v] [-V] [files ...]
  *
  * Options:
  *	-w	suppress warnings
  *	-y	don't check that year is correct (much faster)
  *	-r	repair files that are wrong
  *	-n	with -r, leave the updated file in file.new
- *	-s	skip files not under SVN (slower)
+ *	-s	skip files not under source control (slower)
  *	-h	check hidden files too
- *	-m	use Mercurial instead of SVN
- *	-g	use git instead of SVN
+ *	-m	use Mercurial
+ *	-g	use git (default)
+ *	-S	use SVN
  *	-c	count errors and print summary
  *	-q	don't print errors for each file
  *	-j	check Java syntax files
@@ -39,7 +40,7 @@
  *	-p	check properties syntax files
  *	-t	check other text files
  *	-N	normalize format of repaired copyright to match template
- *	-O	use comma instead of dash in years when repairing files
+ *	-D	use dash instead of comma in years when repairing files
  *	-X	exclude files matching pat (substring only)
  *	-C	file containing correct copyright template, using Java syntax
  *	-A	file containing alternate correct copyright template
@@ -62,14 +63,14 @@ public class Copyright {
     public boolean debug = false;
     public boolean warn = true;
     public boolean ignoreYear = false;
-    public boolean useComma = false;
+    public boolean useDash = false;
     public boolean doRepair = false;
     public boolean dontUpdate = false;
     public boolean normalize = false;
     public boolean skipNoSVN = false;
     public boolean doHidden = false;
     public boolean mercurial = false;
-    public boolean git = false;
+    public boolean git = true;
     public static boolean count = false;
     public boolean quiet = false;
     public boolean doJava = false;
@@ -87,7 +88,9 @@ public class Copyright {
     public int nSun;
     public int nSunApache;
     public int nSunBSD;
+    public int nOldBSD;
     public int nOldCDDL;
+    public int nCDDLGPLCE;
     public int nNoCE;
     public int nWrong;
     public int nNoYear;
@@ -311,8 +314,8 @@ public class Copyright {
 		c.ignoreYear = true;
 	    } else if (argv[optind].equals("-N")) {
 		c.normalize = true;
-	    } else if (argv[optind].equals("-O")) {
-		c.useComma = true;
+	    } else if (argv[optind].equals("-D")) {
+		c.useDash = true;
 	    } else if (argv[optind].equals("-r")) {
 		c.doRepair = true;
 	    } else if (argv[optind].equals("-n")) {
@@ -325,6 +328,8 @@ public class Copyright {
 		c.mercurial = true;
 	    } else if (argv[optind].equals("-g")) {
 		c.git = true;
+	    } else if (argv[optind].equals("-S")) {
+		c.git = false;
 	    } else if (argv[optind].equals("-c")) {
 		count = true;
 	    } else if (argv[optind].equals("-q")) {
@@ -361,8 +366,8 @@ public class Copyright {
 		break;
 	    } else if (argv[optind].startsWith("-")) {
 		System.out.println("Usage: copyright " +
-		    "[-w] [-y] [-r] [-n] [-s] [-h] [-m] [-c] [-q] [-j] " +
-		    "[-x] [-p] [-t] [-N] [-O] [-V] [-X pat] [-C file] " +
+		    "[-w] [-y] [-r] [-n] [-s] [-h] [-m] [-c] [-S] [-q] [-j] " +
+		    "[-x] [-p] [-t] [-N] [-D] [-V] [-X pat] [-C file] " +
                     "[-A file] [-B file] [-P] [-v] [files...]");
 		System.out.println("\t-w\tsuppress warnings");
 		System.out.println("\t-y\tdon't check that year is correct " +
@@ -370,10 +375,12 @@ public class Copyright {
 		System.out.println("\t-r\trepair files that are wrong");
 		System.out.println("\t-n\twith -r, leave the updated file in " +
 				    "file.new");
-		System.out.println("\t-s\tskip files not under SVN (slower)");
+		System.out.println("\t-s\tskip files not under source " +
+				    "control (slower)");
 		System.out.println("\t-h\tcheck hidden files too");
-		System.out.println("\t-m\tuse Mercurial instead of SVN");
-		System.out.println("\t-g\tuse Git instead of SVN");
+		System.out.println("\t-m\tuse Mercurial");
+		System.out.println("\t-g\tuse Git (default)");
+		System.out.println("\t-S\tuse SVN");
 		System.out.println("\t-c\tcount errors and print summary");
 		System.out.println("\t-q\tdon't print errors for each file");
 		System.out.println("\t-j\tcheck Java syntax files");
@@ -382,7 +389,7 @@ public class Copyright {
 		System.out.println("\t-t\tcheck other text files");
 		System.out.println("\t-N\tnormalize format of repaired " +
                                     "copyright to match template");
-		System.out.println("\t-O\tcomma instead of dash between years");
+		System.out.println("\t-D\tdash instead of comma between years");
 		System.out.println("\t-X\texclude files matching pat " +
 				    "(substring only)");
 		System.out.println("\t-C\tfile containing correct copyright " +
@@ -433,8 +440,12 @@ public class Copyright {
 	    System.out.println("Sun+Apache Copyright:\t" + c.nSunApache);
 	if (c.nSunBSD > 0)
 	    System.out.println("Sun BSD Copyright:\t" + c.nSunBSD);
+	if (c.nOldBSD > 0)
+	    System.out.println("Old BSD Copyright:\t" + c.nOldBSD);
 	if (c.nOldCDDL > 0)
 	    System.out.println("Old CDDL Copyright:\t" + c.nOldCDDL);
+	if (c.nCDDLGPLCE > 0)
+	    System.out.println("CDL+GPL+CE Copyright:\t" + c.nCDDLGPLCE);
 	if (c.nNoCE > 0)
 	    System.out.println("Copyright without CE:\t" + c.nNoCE);
 	if (c.nWrong > 0)

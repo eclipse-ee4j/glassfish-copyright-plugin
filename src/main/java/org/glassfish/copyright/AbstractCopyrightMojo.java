@@ -81,7 +81,7 @@ public abstract class AbstractCopyrightMojo extends AbstractMojo {
     protected boolean mavenOnly;
 
     /**
-     * Select SCM system - svn (default), mercurial, git.
+     * Select SCM system - git (default), mercurial, svn.
      *
      * @parameter expression="${copyright.scm}"
      */
@@ -116,11 +116,11 @@ public abstract class AbstractCopyrightMojo extends AbstractMojo {
     protected boolean normalize;
 
     /**
-     * Use comma instead of dash between years?
+     * Use dash instead of comma between years?
      *
-     * @parameter expression="${copyright.usecomma}"
+     * @parameter expression="${copyright.usedash}"
      */
-    protected boolean useComma;
+    protected boolean useDash;
 
     /**
      * Set to true to preserve original copyright entries.
@@ -201,13 +201,13 @@ public abstract class AbstractCopyrightMojo extends AbstractMojo {
 	    }
 	}
 
-	if (scm == null || scm.equalsIgnoreCase("svn"))
+	if (scm == null || scm.equalsIgnoreCase("git"))
 	    ;	// nothing to do, default case
 	else if (scm.equalsIgnoreCase("mercurial") ||
 		    scm.equalsIgnoreCase("hg"))
 	    c.mercurial = true;
-	else if (scm.equalsIgnoreCase("git"))
-	    c.git = true;
+	else if (scm.equalsIgnoreCase("svn"))
+	    c.git = false;
 	else
 	    log.warn("Unknown SCM system ignored: " + scm);
 
@@ -215,7 +215,7 @@ public abstract class AbstractCopyrightMojo extends AbstractMojo {
 	c.warn = warn;
 	c.ignoreYear = ignoreYear;
 	c.normalize = normalize;
-	c.useComma = useComma;
+	c.useDash = useDash;
 	c.preserveCopyrights = preserveCopyrights;
 	c.skipNoSVN = scmOnly;
 	c.doHidden = doHidden;

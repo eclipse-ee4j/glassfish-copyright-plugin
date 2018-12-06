@@ -1,6 +1,6 @@
 /*
  * Copyright 2010 The Apache Software Foundation
- * Copyright (c) 2002-2004 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2002, 2004 Oracle and/or its affiliates. All rights reserved.
  *
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
