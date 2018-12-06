@@ -16,7 +16,8 @@
 
 /**
  * Support for Windows .bat files.
- * No repair for now.
+ *
+ * Note that repair will canonicalize the line terminators to CRLF.
  *
  * @author	Bill Shannon
  */
@@ -80,31 +81,13 @@ public class BatCopyright extends AbstractCopyright {
     }
 
     /**
-     * Repair the c.errors in the file.
-     *
-     * Repair cases and strategy:
-     *
-     *	Missing copyright
-     *		Insert correct copyright
-     *
-     *	Wrong copyright
-     *		Try to extract copyright date.
-     *		Insert correct copyright.
-     *
-     *	Wrong date
-     *		Update existing date in existing copyright.
-     */
-    protected void repair(File file, String comment, RepairType type)
-				throws IOException {
-	// no repair for bat files until CRLF is handled above
-    }
-
-    /**
      * Skip the first comment block, replacing it with the correct copyright.
      */
     protected void replaceCopyright(BufferedReader in,
 			BufferedWriter out, String comment, String lastChanged)
 			throws IOException {
+	// wrap it to canonicalize line terminators
+	out = new BufferedWriter(new CRLFWriter(out));
 	String line;
 	StringBuilder header = new StringBuilder();
 	// skip blank lines at beginning of file
@@ -122,7 +105,7 @@ public class BatCopyright extends AbstractCopyright {
 
 	if (header.length() > 0)
 	    out.write(header.toString());
-	if (comment != null && line != null && line.startsWith("#")) {
+	if (comment != null && line != null && line.startsWith("REM")) {
 	    boolean sawCopyright = false;
 	    do {
 		if (line.length() == 0)
@@ -150,6 +133,7 @@ public class BatCopyright extends AbstractCopyright {
 	    // have to copy the rest here so that blanks aren't skipped
 	    copy(in, out, false);
 	}
+	out.flush();	// need to flush wrapper
     }
 
     /**
@@ -159,6 +143,8 @@ public class BatCopyright extends AbstractCopyright {
     protected void updateCopyright(BufferedReader in,
 				BufferedWriter out, String lastChanged)
 				throws IOException {
+	// wrap it to canonicalize line terminators
+	out = new BufferedWriter(new CRLFWriter(out));
 	String line;
 	StringBuilder header = new StringBuilder();
 	// skip blank lines at beginning of file
@@ -207,6 +193,7 @@ public class BatCopyright extends AbstractCopyright {
 	    // have to copy the rest here so that blanks aren't skipped
 	    copy(in, out, false);
 	}
+	out.flush();	// need to flush wrapper
     }
 
     /**

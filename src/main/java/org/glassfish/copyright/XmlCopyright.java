@@ -47,7 +47,8 @@ public class XmlCopyright extends CommonCopyright {
 		    fname.endsWith(".wsdl") || fname.endsWith(".inc") ||
 		    fname.endsWith(".jnlp") || fname.endsWith(".tld") ||
 		    fname.endsWith(".xcs") || fname.endsWith(".jsf") ||
-		    fname.endsWith(".hs") || fname.endsWith(".jhm")
+		    fname.endsWith(".hs") || fname.endsWith(".jhm") ||
+		    (fname.equals("build.properties") && startsWith(file, "<"))
 		) {
 	    return true;
 	}

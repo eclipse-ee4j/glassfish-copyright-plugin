@@ -99,6 +99,7 @@ public class Copyright {
     private AbstractCopyright javaCopyright;
     private AbstractCopyright xmlCopyright;
     private AbstractCopyright textCopyright;
+    private AbstractCopyright sigCopyright;
     private AbstractCopyright propsCopyright;
     private AbstractCopyright batCopyright;
     private AbstractCopyright mdCopyright;
@@ -114,6 +115,7 @@ public class Copyright {
 	    javaCopyright = new JavaCopyright(this);
 	    xmlCopyright = new XmlCopyright(this);
 	    textCopyright = new TextCopyright(this);
+	    sigCopyright = new SigCopyright(this);
 	    propsCopyright = new PropertiesCopyright(this);
 	    batCopyright = new BatCopyright(this);
 	    mdCopyright = new MarkdownCopyright(this);
@@ -252,6 +254,11 @@ public class Copyright {
 		System.out.println("File " + file + " is an asciidoc file");
 	    if (doText)
 		adCopyright.checkCopyright(file);
+	} else if (sigCopyright.supports(file)) {
+	    if (debug)
+		System.out.println("File " + file + " is a signature file");
+	    if (doProps)
+		sigCopyright.checkCopyright(file);
 	} else if (propsCopyright.supports(file)) {
 	    if (debug)
 		System.out.println("File " + file + " is a properties file");
