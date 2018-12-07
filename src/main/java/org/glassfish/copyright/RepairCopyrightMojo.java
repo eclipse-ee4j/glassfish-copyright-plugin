@@ -21,20 +21,20 @@ import java.util.*;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.logging.Log;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.model.Resource;
 
 /**
  * Repairs copyrights of files.
- *
- * @goal repair
- * @phase process-sources
  */
+@Mojo(name = "repair", defaultPhase = LifecyclePhase.PROCESS_SOURCES)
 public class RepairCopyrightMojo extends AbstractCopyrightMojo {
     /**
      * Set to false to disable updating files in place.
-     *
-     * @parameter expression="${copyright.update}" default-value="true"
      */
+    @Parameter(property = "copyright.update", defaultValue = "true")
     private boolean update = true;
 
     public void execute() throws MojoExecutionException {

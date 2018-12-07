@@ -22,6 +22,8 @@ import java.util.*;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.logging.Log;
+import org.apache.maven.plugins.annotations.Component;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.model.Resource;
 import org.codehaus.plexus.resource.ResourceManager;
 import org.codehaus.plexus.resource.loader.FileResourceCreationException;
@@ -38,140 +40,122 @@ public abstract class AbstractCopyrightMojo extends AbstractMojo {
      *
      * This parameter is resolved as a resource, then a URL, then a file.
      * This is a comma-separated list.
-     *
-     * @parameter expression="${copyright.exclude}"
      */
+    @Parameter(property = "copyright.exclude")
     protected String excludeFile;
 
     /**
      * Exclude pattern list.
-     *
-     * @parameter
      */
+    @Parameter
     protected String[] exclude;
 
     /**
      * Base directory for project.
      * Should not need to be set.
-     *
-     * @parameter default-value="${project.basedir}"
      */
+    @Parameter(defaultValue = "project.basedir")
     protected File baseDirectory;
 
     /**
      * Source directory.
      *
-     * @parameter default-value="${project.build.sourceDirectory}"
+    @Parameter(defaultValue = "project.build.sourceDirectory"
      */
     protected File sourceDirectory;
 
     /**
      * Resources.
-     *
-     * @parameter default-value="${project.resources}"
      */
+    @Parameter(defaultValue = "${project.resources}")
     protected ArrayList<Resource> resources;
 
     /**
      * Check all files in project or just the source and resource
      * files maven knows about?
-     *
-     * @parameter expression="${copyright.mavenonly}"
      */
+    @Parameter(property = "copyright.mavenonly")
     protected boolean mavenOnly;
 
     /**
      * Select SCM system - git (default), mercurial, svn.
-     *
-     * @parameter expression="${copyright.scm}"
      */
+    @Parameter(property = "copyright.scm")
     protected String scm;
 
     /**
      * Turn on debugging.
-     *
-     * @parameter expression="${copyright.debug}"
      */
+    @Parameter(property = "copyright.debug")
     protected boolean debug;
 
     /**
      * Turn off warnings.
-     *
-     * @parameter expression="${copyright.warn}" default-value="true"
      */
+    @Parameter(property = "copyright.warn", defaultValue = "true")
     protected boolean warn = true;
 
     /**
      * Don't check that the year is correct?
-     *
-     * @parameter expression="${copyright.ignoreyear}"
      */
+    @Parameter(property = "copyright.ignoreyear")
     protected boolean ignoreYear;
 
     /**
      * Normalize format of repaired copyright to match template?
-     *
-     * @parameter expression="${copyright.normalize}"
      */
+    @Parameter(property = "copyright.normalize")
     protected boolean normalize;
 
     /**
      * Use dash instead of comma between years?
-     *
-     * @parameter expression="${copyright.usedash}"
      */
+    @Parameter(property = "copyright.usedash")
     protected boolean useDash;
 
     /**
      * Set to true to preserve original copyright entries.
-     *
-     * @parameter expression="${copyright.preservecopyrights}"
-     *			default-value="false"
      */
-    protected boolean preserveCopyrights = false;
+    @Parameter(property = "copyright.preservecopyrights")
+    protected boolean preserveCopyrights;
 
 
     /**
      * Skip files not under SCM?
-     *
-     * @parameter expression="${copyright.scmonly}"
      */
+    @Parameter(property = "copyright.scmonly")
     protected boolean scmOnly;
 
     /**
      * Check hidden files too?
      *
-     * @parameter expression="${copyright.hidden}"
+    @Parameter(property = "copyright.hidden"
      */
     protected boolean doHidden;
 
     /**
      * Copyright template file.
-     *
-     * @parameter expression="${copyright.template}"
      */
+    @Parameter(property = "copyright.template")
     protected String templateFile;
 
     /**
      * Alternate copyright template file.
-     *
-     * @parameter expression="${copyright.alternatetemplate}"
      */
     // XXX - for compatibility
+    @Parameter(property = "copyright.alternatetemplate")
     protected String alternateTemplateFile;
 
     /**
      * Alternate copyright template files.
-     *
-     * @parameter expression="${copyright.alternatetemplates}"
      */
+    @Parameter(property = "copyright.alternatetemplates")
     protected List<String> alternateTemplateFiles;
 
     /**
      * Copyright BSD template file.
-     *
-     * @parameter expression="${copyright.bsdtemplate}"
      */
+    @Parameter(property = "copyright.bsdtemplate")
     protected String bsdTemplateFile;
 
     /**
@@ -184,6 +168,7 @@ public abstract class AbstractCopyrightMojo extends AbstractMojo {
      * @required
      * @readonly
      */
+    @Component
     private ResourceManager resourceManager;
 
     /**

@@ -182,6 +182,11 @@
             <version>3.5.3</version>
         </dependency>
         <dependency>
+            <groupId>org.apache.maven.plugin-tools</groupId>
+            <artifactId>maven-plugin-annotations</artifactId>
+            <version>3.4</version>
+        </dependency>
+        <dependency>
             <groupId>org.codehaus.plexus</groupId>
             <artifactId>plexus-resources</artifactId>
             <version>1.1.0</version>

@@ -29,7 +29,7 @@ To repair any errors discovered (use this carefully, and check the results):
 
     $ mvn glassfish-copyright:repair
 
-You can add the following items in the <configuration> section:
+You can add the following items in the configuration section:
 
     <excludeFile>file of exclude patterns</excludeFile>
     <exclude>

@@ -21,14 +21,14 @@ import java.util.*;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.logging.Log;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.model.Resource;
 
 /**
  * Check copyrights of files.
- *
- * @goal check
- * @phase process-sources
  */
+@Mojo(name = "check", defaultPhase = LifecyclePhase.PROCESS_SOURCES)
 public class CheckCopyrightMojo extends AbstractCopyrightMojo {
     public void execute() throws MojoExecutionException {
 	log = getLog();
