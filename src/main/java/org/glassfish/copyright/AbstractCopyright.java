@@ -56,7 +56,7 @@ public abstract class AbstractCopyright {
     private static final String COPYRIGHT_STRING =
 	"(Portions )?Copyright (\\(c\\) )?([-0-9, ]+) (by )?([A-Za-z].*)";
     private static final String COPYRIGHT_LINE =
-	"^" + COPYRIGHT_STRING + "$";
+	"^" + COPYRIGHT_STRING + "(\nAll rights reserved.)?$";
     private static final String COPYRIGHT_LINE_TEMPLATE =
 	"^Copyright (\\(c\\) )?YYYY (by )?([A-Za-z].*)$\n";
 
@@ -775,11 +775,9 @@ public abstract class AbstractCopyright {
 		line = Pattern.quote(line);
 		if (line.indexOf("YYYY") >= 0) {
 		    sawCopyright = true;
-		    line = line.replace("YYYY", "\\E[-0-9, ]+\\Q");
-		    if (line.contains(licensor))
-			line = line + "(\n" + COPYRIGHT_LINE + ")*";
-		    else
-			line = "(" + COPYRIGHT_LINE + "\n)*" + line;
+		    // replace the template copyright line with a pattern
+		    // that allows multiple copyright lines from anyone
+		    line = COPYRIGHT_LINE + "(\n" + COPYRIGHT_LINE + ")*";
 		}
 	    }
 	    copyright.append(line).append('\n');
