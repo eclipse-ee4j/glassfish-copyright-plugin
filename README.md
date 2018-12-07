@@ -8,11 +8,11 @@ Configure it as follows:
     <build>
         <plugins>
             <plugin>
-                    <groupId>org.glassfish.copyright</groupId>
-                    <artifactId>glassfish-copyright-maven-plugin</artifactId>
-            <configuration>
-                <excludeFile>copyright-exclude</excludeFile>
-            </configuration>
+                <groupId>org.glassfish.copyright</groupId>
+                <artifactId>glassfish-copyright-maven-plugin</artifactId>
+                <configuration>
+                    <excludeFile>copyright-exclude</excludeFile>
+                </configuration>
             </plugin>
         </plugins>
     </build>
@@ -36,18 +36,22 @@ You can add the following items in the <configuration> section:
         <pattern>an exclude pattern</pattern>
     </exclude>
     <scm>svn|mercurial|git</scm>    <!-- defaults to svn -->
-    <debug>true</debug>     <!--  turn on debugging -->
-    <update>false</update>      <!--  for use with repair -->
-    <warnings>false</warnings>  <!--  turn off warnings -->
+    <debug>true</debug>             <!--  turn on debugging -->
+    <update>false</update>          <!--  for use with repair -->
+    <warnings>false</warnings>      <!--  turn off warnings -->
     <ignoreYear>true</ignoreYear>   <!-- don't check that year is correct -->
-    <scmOnly>true</scmOnly>     <!--  skip files not under SCM -->
+    <scmOnly>true</scmOnly>         <!--  skip files not under SCM -->
     <templateFile>file containg template</templateFile>
     <alternateTemplateFile>alterate template file</alternateTemplateFile>
+    <alternateTemplateFiles>
+      <alternateTemplateFile>alterate template file1</alternateTemplateFile>
+      <alternateTemplateFile>alterate template file2</alternateTemplateFile>
+    </alternateTemplateFiles>
     <bsdTemplateFile>file containg BSD template</bsdTemplateFile>
-    <useComma>true</useComma>   <!--  use comma instead of dash in years -->
+    <useDash>true</useDash>        <!--  use dash instead of comma in years -->
     <normalize>true</normalize> <!-- normalize format of repaired copyright -->
     <preserveCopyrights>true</preserveCopyrights>
-				<!-- preserve original copyright entries -->
+                                    <!-- preserve original copyright entries -->
 
 
 There are various errors that this plugin will correct:
@@ -60,13 +64,12 @@ There are various errors that this plugin will correct:
 Note that the repair option doesn't know what the copyright for a
 file *should* be.  If the only thing wrong is the date, it just fixes
 it.  But if the header is wrong it assumes the file should have the
-CDDL+GPL copyright, and replaces any existing copyright with that
+EPL+GPL copyright, and replaces any existing copyright with that
 (or whatever license you've set as the template).
 
-If the file has a BSD license, it relaces it with the standard BSD
-license.  If the file has "supplemental" license text in our standard
-format (e.g., an Apache or MIT license), it tries to preserve that.
-However, if the file is *intended* to have one of the Apache-derived
+If the file has an EDL/BSD license, it relaces it with the standard EDL
+license.  If the file has a known Apache license, it tries to preserve
+that.  However, if the file is *intended* to have one of the Apache
 copyright/license headers or the BSD license (for example), but
 doesn't, or it isn't in the expected format, the wrong license will
 be applied.

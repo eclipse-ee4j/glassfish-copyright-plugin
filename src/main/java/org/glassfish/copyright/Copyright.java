@@ -43,7 +43,7 @@
  *	-D	use dash instead of comma in years when repairing files
  *	-X	exclude files matching pat (substring only)
  *	-C	file containing correct copyright template, using Java syntax
- *	-A	file containing alternate correct copyright template
+ *	-A	file(s) containing alternate correct copyright template(s)
  *	-B	file containing correct BSD copyright template
  *	-P	preserve original copyrights
  *	-v	verbose output
@@ -80,7 +80,7 @@ public class Copyright {
     public boolean preserveCopyrights = false;
     public boolean verbose = false;
     public File correctTemplate;
-    public File alternateTemplate;
+    public List<File> alternateTemplates = new ArrayList<File>();
     public File correctBSDTemplate;
 
     public int nMissing;
@@ -351,7 +351,8 @@ public class Copyright {
 	    } else if (argv[optind].equals("-C")) {
 		c.correctTemplate = new File(argv[++optind]);
 	    } else if (argv[optind].equals("-A")) {
-		c.alternateTemplate = new File(argv[++optind]);
+		for (String alt : argv[++optind].split(File.pathSeparator))
+		    c.alternateTemplates.add(new File(alt));
 	    } else if (argv[optind].equals("-B")) {
 		c.correctBSDTemplate = new File(argv[++optind]);
 	    } else if (argv[optind].equals("-P")) {
@@ -368,7 +369,7 @@ public class Copyright {
 		System.out.println("Usage: copyright " +
 		    "[-w] [-y] [-r] [-n] [-s] [-h] [-m] [-c] [-S] [-q] [-j] " +
 		    "[-x] [-p] [-t] [-N] [-D] [-V] [-X pat] [-C file] " +
-                    "[-A file] [-B file] [-P] [-v] [files...]");
+                    "[-A file(s)] [-B file] [-P] [-v] [files...]");
 		System.out.println("\t-w\tsuppress warnings");
 		System.out.println("\t-y\tdon't check that year is correct " +
 				    "(much faster)");
@@ -394,8 +395,8 @@ public class Copyright {
 				    "(substring only)");
 		System.out.println("\t-C\tfile containing correct copyright " +
 				    "template, using Java syntax");
-		System.out.println("\t-A\tfile containing alternate correct " +
-				    "copyright template");
+		System.out.println("\t-A\tfile(s) containing alternate " +
+				    "correct copyright template(s)");
 		System.out.println("\t-B\tfile containing correct BSD " +
 				    "copyright template");
 		System.out.println("\t-P\tpreserve original copyrights");

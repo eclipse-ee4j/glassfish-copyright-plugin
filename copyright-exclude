@@ -1,5 +1,7 @@
 LICENSE
 README.md
+NOTICE.md
+CONTRIBUTING.md
 copyright-exclude
 src/test
 src/main/resources

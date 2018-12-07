@@ -134,7 +134,7 @@ public abstract class AbstractCopyright {
 	    } else {
 		correctCopyright = getCopyrightText(DEFAULT_CORRECT);
 		cpat = getCopyrightPattern(DEFAULT_CORRECT);
-		if (c.alternateTemplate == null) {
+		if (c.alternateTemplates.isEmpty()) {
 		    acpatlist.add(getCopyrightPattern(DEFAULT_ALTERNATE));
 		    acpatlist.add(getCopyrightPattern("apache-copyright.txt"));
 		    acpatlist.add(getCopyrightPattern(
@@ -144,8 +144,9 @@ public abstract class AbstractCopyright {
 		    acpatlist.add(getCopyrightPattern("w3c-copyright.txt"));
 		}
 	    }
-	    if (c.alternateTemplate != null) {
-		acpatlist.add(getCopyrightPattern(c.alternateTemplate));
+	    if (!c.alternateTemplates.isEmpty()) {
+		for (File alt : c.alternateTemplates)
+		    acpatlist.add(getCopyrightPattern(alt));
 	    }
 	    if (c.correctBSDTemplate != null) {
 		correctBSDCopyright = getCopyrightText(c.correctBSDTemplate);

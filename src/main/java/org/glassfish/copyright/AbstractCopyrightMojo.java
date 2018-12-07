@@ -157,7 +157,15 @@ public abstract class AbstractCopyrightMojo extends AbstractMojo {
      *
      * @parameter expression="${copyright.alternatetemplate}"
      */
+    // XXX - for compatibility
     protected String alternateTemplateFile;
+
+    /**
+     * Alternate copyright template files.
+     *
+     * @parameter expression="${copyright.alternatetemplates}"
+     */
+    protected List<String> alternateTemplateFiles;
 
     /**
      * Copyright BSD template file.
@@ -223,9 +231,14 @@ public abstract class AbstractCopyrightMojo extends AbstractMojo {
 	if (templateFile != null)
 	    c.correctTemplate = 
 		new File(getResourceFile(templateFile).getPath());
-	if (alternateTemplateFile != null)
-	    c.alternateTemplate = 
-		new File(getResourceFile(alternateTemplateFile).getPath());
+	if (alternateTemplateFile != null) {
+	    c.alternateTemplates.add(
+		new File(getResourceFile(alternateTemplateFile).getPath()));
+	}
+	if (alternateTemplateFiles != null)
+	    for (String alt : alternateTemplateFiles)
+		c.alternateTemplates.add(
+		    new File(getResourceFile(alt).getPath()));
 	if (bsdTemplateFile != null)
 	    c.correctBSDTemplate = 
 		new File(getResourceFile(bsdTemplateFile).getPath());
