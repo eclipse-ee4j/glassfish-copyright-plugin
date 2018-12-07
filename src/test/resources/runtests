@@ -31,6 +31,7 @@ else
 	files=`echo *.java *.xml *.properties */build.properties *.jsp *.md *.adoc`
 fi
 
+status=0
 for i in $files
 do
 	opt=
@@ -62,17 +63,21 @@ do
 				else
 					echo "$i: REPAIR INCORRECT"
 					diff $i.new.expectyear $i.new
+					status=1
 				fi
 			fi
 		else
 			echo "$i: FAILED"
 			echo "  EXPECTED: "`cat $i.expect`
 			echo "  GOT:      "`cat $TMP`
+			status=1
 		fi
 	elif [ -n "`cat $TMP`" ]
 	then
 		echo "$i: FAILED"
 		echo "  EXPECTED: <nothing>"
 		echo "  GOT:      "`cat $TMP`
+		status=1
 	fi
 done
+exit $status
