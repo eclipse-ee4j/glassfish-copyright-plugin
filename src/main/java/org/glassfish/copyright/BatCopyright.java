@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010, 2018 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2010, 2019 Oracle and/or its affiliates. All rights reserved.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v. 2.0, which is available at
@@ -197,7 +197,14 @@ public class BatCopyright extends AbstractCopyright {
     }
 
     /**
-     * Convert the comment text to .properties syntax.
+     * Line terminator is always CRLF for .bat files.
+     */
+    protected String guessLineTerminator(Reader in) {
+	return "\r\n";
+    }
+
+    /**
+     * Convert the comment text to .bat syntax.
      */
     protected String toComment(String comment) {
 	BufferedReader r = new BufferedReader(new StringReader(comment));

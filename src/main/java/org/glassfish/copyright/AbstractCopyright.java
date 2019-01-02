@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010, 2018 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2010, 2019 Oracle and/or its affiliates. All rights reserved.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v. 2.0, which is available at
@@ -34,6 +34,7 @@ public abstract class AbstractCopyright {
     private Pattern cpat;
     private Pattern bpat;
     private List<Pattern> acpatlist = new ArrayList<Pattern>();
+    private String lineTerminator ="\n";
 
     // patterns for good copyright headers
     private static Pattern apat;
@@ -366,6 +367,7 @@ public abstract class AbstractCopyright {
 				new FileInputStream(file), "iso-8859-1"));
 	    out = new BufferedWriter(new OutputStreamWriter(
 				new FileOutputStream(newfile), "iso-8859-1"));
+	    lineTerminator = guessLineTerminator(in);
 	    switch (type) {
 	    case MISSING:
 		if (c.debug)
@@ -509,8 +511,37 @@ public abstract class AbstractCopyright {
     }
 
     /**
+     * Guess the line terminator to be used based on the first line
+     * terminator seen in the file.
+     */
+    protected String guessLineTerminator(Reader in) throws IOException {
+	String term = "\n";	// default
+	if (!in.markSupported())
+	    return term;	// assume default is good enough
+	in.mark(1024);
+	for (int i = 0; i < 1023; i++) {
+	    int c = in.read();
+	    if (c == -1)
+		break;
+	    if (c == '\n') {
+		term ="\n";
+		break;
+	    }
+	    if (c == '\r') {
+		if (in.read() == '\n')
+		    term = "\r\n";
+		else
+		    term = "\r";	// never happens?
+		break;
+	    }
+	}
+	in.reset();
+	return term;
+    }
+
+    /**
      * Copy "in" to "out", skipping blank lines at the beginning of "in" if
-     * skipBlanks is true, and canonicalizing the line terminators to '\n'.
+     * skipBlanks is true, and canonicalizing the line terminators.
      */
     protected void copy(BufferedReader in, BufferedWriter out,
 				boolean skipBlanks) throws IOException {
@@ -522,7 +553,7 @@ public abstract class AbstractCopyright {
 		skipBlanks = false;
 	    }
 	    out.write(line);
-	    out.write('\n');	// canonicalize line separator
+	    out.write(lineTerminator);	// canonicalize line separator
 	}
     }
 
