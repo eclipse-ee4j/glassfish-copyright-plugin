@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011, 2018 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2011, 2019 Oracle and/or its affiliates. All rights reserved.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v. 2.0, which is available at
@@ -54,13 +54,13 @@ public abstract class AbstractCopyrightMojo extends AbstractMojo {
      * Base directory for project.
      * Should not need to be set.
      */
-    @Parameter(defaultValue = "project.basedir")
+    @Parameter(defaultValue = "${project.basedir}")
     protected File baseDirectory;
 
     /**
      * Source directory.
      *
-    @Parameter(defaultValue = "project.build.sourceDirectory"
+    @Parameter(defaultValue = "${project.build.sourceDirectory}"
      */
     protected File sourceDirectory;
 
