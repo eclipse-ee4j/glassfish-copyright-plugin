@@ -81,7 +81,7 @@ spec:
             sh '''
               mvn clean install
               cd src/test/resources
-              bash -ex runtests
+              bash -x runtests
             '''
             junit testResults: '**/target/surefire-reports/*.xml', allowEmptyResults: true
           }
