@@ -99,6 +99,8 @@ public abstract class AbstractCopyright {
     protected static final String thisYear =
 	"" + Calendar.getInstance().get(Calendar.YEAR);
 
+    protected static final String UNKNOWN_DATE = "UNKNOWN";
+
     static {
 	try {
 	    // good patterns
@@ -310,6 +312,14 @@ public abstract class AbstractCopyright {
 	else if (lc == null)
 	    lc = lastChanged(file.getPath());
 
+	if (lc == UNKNOWN_DATE) {
+	    if (!c.sawUnknown)
+		err("Some file(s) with unknown date (shallow clone?)");
+	    c.sawUnknown = true;
+	    if (c.verbose)
+		System.out.println("Unknown date: " + file);
+	    return;
+	}
 	if (!lastYear.equals(lc)) {
 	    err(file + ": Copyright year is wrong; is " +
 				lastYear + ", should be " + lc);
@@ -913,8 +923,12 @@ public abstract class AbstractCopyright {
             p.getInputStream()));
         String lcd = "";
         String line;
+	boolean first = true;
         // date returned in the form 2006-09-04
         while ((line = r.readLine()) != null) {
+	    if (first && line.endsWith("(grafted)"))
+		return UNKNOWN_DATE;
+	    first = false;
             if (line.startsWith("Date:")) {
                 final String[] split = line.split(" ");
                 lcd = split[split.length - 1];
