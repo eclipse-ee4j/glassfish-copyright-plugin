@@ -915,7 +915,7 @@ public abstract class AbstractCopyright {
 
     private static String lastChangedGit(String file) throws IOException {
         ProcessBuilder pb = new ProcessBuilder("git", "log", "-n", "1",
-            "--date=local", file);
+            "--decorate", "--date=local", file);
         pb.redirectErrorStream(true);
         Process p = pb.start();
         p.getOutputStream().close();
