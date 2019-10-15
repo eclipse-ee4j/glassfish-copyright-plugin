@@ -134,6 +134,8 @@
                     <tagNameFormat>@{project.version}</tagNameFormat>
                 </configuration>
             </plugin>
+	    <!--
+		XXX - Can't depend on ourself.
             <plugin>
                 <groupId>org.glassfish.copyright</groupId>
                 <artifactId>glassfish-copyright-maven-plugin</artifactId>
@@ -143,7 +145,17 @@
 			${project.basedir}/copyright-exclude
 		    </excludeFile>
 		</configuration>
+		<executions>
+		    <execution>
+			<id>copyright-check</id>
+			<phase>validate</phase>
+			<goals>
+			    <goal>check</goal>
+			</goals>
+		    </execution>
+		</executions>
             </plugin>
+	    -->
         </plugins>
 
         <pluginManagement>

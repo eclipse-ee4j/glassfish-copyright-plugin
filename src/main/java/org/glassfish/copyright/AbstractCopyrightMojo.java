@@ -68,7 +68,7 @@ public abstract class AbstractCopyrightMojo extends AbstractMojo {
      * Resources.
      */
     @Parameter(defaultValue = "${project.resources}")
-    protected ArrayList<Resource> resources;
+    protected List<Resource> resources;
 
     /**
      * Check all files in project or just the source and resource
