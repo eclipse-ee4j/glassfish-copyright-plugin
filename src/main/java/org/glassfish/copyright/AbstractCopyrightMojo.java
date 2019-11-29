@@ -90,6 +90,12 @@ public abstract class AbstractCopyrightMojo extends AbstractMojo {
     protected boolean debug;
 
     /**
+     * Turn on verbose mode.
+     */
+    @Parameter(property = "copyright.verbose")
+    protected boolean verbose;
+
+    /**
      * Turn off warnings.
      */
     @Parameter(property = "copyright.warn", defaultValue = "true")
@@ -212,6 +218,7 @@ public abstract class AbstractCopyrightMojo extends AbstractMojo {
 	c.preserveCopyrights = preserveCopyrights;
 	c.skipNoSVN = scmOnly;
 	c.doHidden = doHidden;
+	c.quiet = !verbose;
 
 	if (templateFile != null)
 	    c.correctTemplate = 
