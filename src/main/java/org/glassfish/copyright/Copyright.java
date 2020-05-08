@@ -80,7 +80,7 @@ public class Copyright {
     public boolean doText = false;
     public boolean preserveCopyrights = false;
     public boolean verbose = false;
-	public boolean explicitExclude = false;
+    public boolean explicitExclude = false;
     public File correctTemplate;
     public List<File> alternateTemplates = new ArrayList<File>();
     public File correctBSDTemplate;
@@ -346,7 +346,7 @@ public class Copyright {
 	    } else if (argv[optind].equals("-t")) {
 		c.doText = true;
 	    } else if (argv[optind].equals("-e")) {
-		    c.explicitExclude = true;
+		c.explicitExclude = true;
 	    } else if (argv[optind].equals("-X")) {
 		String ex = argv[++optind];
 		if (ex.startsWith("@"))
