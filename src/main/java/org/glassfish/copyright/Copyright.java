@@ -39,7 +39,7 @@
  *	-x	check XML syntax files
  *	-p	check properties syntax files
  *	-t	check other text files
- *  -e  exclude files that contains DO NOT ALTER OR REMOVE COPYRIGHT NOTICES
+ *	-e	exclude files that contains DO NOT ALTER OR REMOVE COPYRIGHT NOTICES
  *	-N	normalize format of repaired copyright to match template
  *	-D	use dash instead of comma in years when repairing files
  *	-X	exclude files matching pat (substring only)
@@ -80,7 +80,7 @@ public class Copyright {
     public boolean doText = false;
     public boolean preserveCopyrights = false;
     public boolean verbose = false;
-    public boolean explicitExclude = false;
+	public boolean explicitExclude = false;
     public File correctTemplate;
     public List<File> alternateTemplates = new ArrayList<File>();
     public File correctBSDTemplate;
@@ -346,8 +346,8 @@ public class Copyright {
 	    } else if (argv[optind].equals("-t")) {
 		c.doText = true;
 	    } else if (argv[optind].equals("-e")) {
-			c.explicitExclude = true;
-		}else if (argv[optind].equals("-X")) {
+		    c.explicitExclude = true;
+	    } else if (argv[optind].equals("-X")) {
 		String ex = argv[++optind];
 		if (ex.startsWith("@"))
 		    c.addExcludes(ex.substring(1));
