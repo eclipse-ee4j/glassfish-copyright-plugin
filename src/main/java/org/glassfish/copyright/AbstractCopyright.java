@@ -68,7 +68,7 @@ public abstract class AbstractCopyright {
 	"permission notice:\n" +
 	"\n";
 
-	private static final String DONT_ALTER_HEADER = "DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.";
+    private static final String DONT_ALTER_HEADER = "DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.";
 
     private static final String DEFAULT_CORRECT = "epl-copyright.txt";
     private static final String DEFAULT_ALTERNATE = "apache-copyright.txt";
