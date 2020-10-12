@@ -35,8 +35,6 @@ apiVersion: v1
 kind: Pod
 metadata:
 spec:
-  securityContext:
-    runAsUser: 1000100000
   volumes:
     - name: maven-repo-shared-storage
       persistentVolumeClaim:
@@ -45,7 +43,7 @@ spec:
       emptyDir: {}
   containers:
   - name: jnlp
-    image: jenkins/jnlp-slave:alpine
+    image: eclipsecbijenkins/basic-agent
     imagePullPolicy: IfNotPresent
     volumeMounts:
     env:
@@ -79,7 +77,7 @@ spec:
         container('build-container') {
           timeout(time: 10, unit: 'MINUTES') {
             sh '''
-              mvn clean install
+              mvn clean install -B
               cd src/test/resources
               bash -x runtests
             '''
