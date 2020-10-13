@@ -20,17 +20,21 @@ package org.glassfish.copyright;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Parameter;
 
 /**
  * Check copyrights of files.
  */
 @Mojo(name = "check", defaultPhase = LifecyclePhase.PROCESS_SOURCES)
 public class CheckCopyrightMojo extends AbstractCopyrightMojo {
+	@Parameter(property = "copyright.quiet", defaultValue = "true")
+	private boolean quiet;
+
     public void execute() throws MojoExecutionException {
 	log = getLog();
 
 	Copyright c = new Copyright();
-	c.quiet = true;
+	c.quiet = quiet;
 	initializeOptions(c);
 
 	check(c);
