@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2010, 2019 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2020 Contributors to Eclipse Foundation. All rights reserved.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v. 2.0, which is available at
@@ -915,7 +916,7 @@ public abstract class AbstractCopyright {
 
     private static String lastChangedGit(String file) throws IOException {
         ProcessBuilder pb = new ProcessBuilder("git", "log", "-n", "1",
-            "--decorate", "--date=local", file);
+            "--decorate", "--date=local", "--format=medium", file);
         pb.redirectErrorStream(true);
         Process p = pb.start();
         p.getOutputStream().close();
