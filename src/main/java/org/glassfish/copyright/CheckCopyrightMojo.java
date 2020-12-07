@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011, 2018 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2011, 2020 Oracle and/or its affiliates. All rights reserved.
  * Copyright (c) 2020 Contributors to Eclipse Foundation. All rights reserved.
  *
  * This program and the accompanying materials are made available under the
@@ -30,7 +30,6 @@ public class CheckCopyrightMojo extends AbstractCopyrightMojo {
 	log = getLog();
 
 	Copyright c = new Copyright();
-	c.quiet = true;
 	initializeOptions(c);
 
 	check(c);
