@@ -53,6 +53,10 @@ You can add the following items in the configuration section:
     <preserveCopyrights>true</preserveCopyrights>
                                     <!-- preserve original copyright entries -->
 
+Additionally, `check` goal accepts:
+
+    <quiet>true</quiet> <!-- true/false: do not report/report failures -->
+
 
 There are various errors that this plugin will correct:
 
