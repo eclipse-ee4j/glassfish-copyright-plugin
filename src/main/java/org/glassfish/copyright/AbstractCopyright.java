@@ -69,6 +69,8 @@ public abstract class AbstractCopyright {
 	"permission notice:\n" +
 	"\n";
 
+    private static final String DONT_ALTER_HEADER = "DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.";
+
     private static final String DEFAULT_CORRECT = "epl-copyright.txt";
     private static final String DEFAULT_ALTERNATE = "apache-copyright.txt";
     private static final String DEFAULT_BSD = "edl-copyright.txt";
@@ -94,6 +96,8 @@ public abstract class AbstractCopyright {
     private static Pattern bsdpat = Pattern.compile(
 	"(THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS)"+
 	"|(SPDX-License-Identifier: BSD-3-Clause)", Pattern.MULTILINE);
+    // pattern to detect DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+    protected static Pattern doNotAlterPattern = Pattern.compile(DONT_ALTER_HEADER);
 
     protected static final String allrights = "All rights reserved.";
 
@@ -216,8 +220,17 @@ public abstract class AbstractCopyright {
 		System.out.println(comment);
 		System.out.println("---");
 	    }
-	    if (c.warn && !c.quiet)
-		warnCopyright(file, r);
+        if (c.warn && !c.quiet) {
+            warnCopyright(file, r);
+        }
+
+        if (c.explicitExclude) {
+            if (isEditableCopyright(file, r)) {
+                err(file + ": EXCLUDED FROM REPAIR: contains: " + DONT_ALTER_HEADER);
+                return;
+            }
+        }
+
 	} finally {
 	    if (r != null)
 		r.close();
@@ -334,6 +347,24 @@ public abstract class AbstractCopyright {
     }
 
     /**
+     * Verifies if the file contains the message:
+     * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+     *
+     * @param file
+     * @return
+     */
+    protected boolean isEditableCopyright(final File file, BufferedReader in) throws IOException {
+    String line;
+    while ((line = in.readLine()) != null) {
+        Matcher m2 = doNotAlterPattern.matcher(line);
+        if (m2.find()) {
+            return false;
+        }
+    }
+    return true;
+    }
+
+	/**
      * Does the string match the pattern?
      */
     protected boolean matches(Pattern pat, String s) {
@@ -511,6 +542,11 @@ public abstract class AbstractCopyright {
 		if (line.indexOf(licensor) < 0)
 		    System.out.println(file +
 				    ": WARNING: extra copyright: " + line);
+	    }
+
+	    Matcher m2 = doNotAlterPattern.matcher(line);
+	    if (m2.find()) {
+		    System.out.println(file + ": WARNING: contains: " + line);
 	    }
 	    /*
 	     * XXX - too many false positives for this one
